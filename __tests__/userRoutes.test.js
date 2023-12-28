@@ -82,21 +82,21 @@ describe("GET /users", function () {
 });
 
 describe("GET /users/:username", function () {
-    // test("Get user", async function () {
-    //     let response = await request(app).get(`/users/bob`)
-    //         .send({ _token: testUserToken })
-    //     expect(response.statusCode).toBe(200)
-    //     expect(response.body).toEqual({
-    //         user: [{
-    //             username: "bob",
-    //             first_name: "Bob",
-    //             last_name: "Smith",
-    //             phone: "+14150000000",
-    //             join_at: expect.any(Date),
-    //             last_login_at: expect.any(Date)
-    //         }]
-    //     })
-    // });
+    test("Get user", async function () {
+        let response = await request(app).get(`/users/bob`)
+            .send({ _token: testUserToken })
+        expect(response.statusCode).toBe(200)
+        expect(response.body).toEqual({
+            user: [{
+                username: "bob",
+                first_name: "Bob",
+                last_name: "Smith",
+                phone: "+14150000000",
+                join_at: expect.any(String),
+                last_login_at: expect.any(String)
+            }]
+        })
+    });
     test("unauthorized get user", async function () {
         let response = await request(app).get("/users/bob")
         expect(response.statusCode).toBe(401)
@@ -112,7 +112,7 @@ describe("GET /users/:username/to", function () {
             messages: [{
                 id: msg2Id,
                 body: "Hi Bob, this is Test.",
-                sent_at: expect.any(Date),
+                sent_at: expect.any(String),
                 read_at: null,
                 from_user: {
                     username: "test",
@@ -137,7 +137,7 @@ describe("GET /users/:username/from", function () {
             messages: [{
                 id: msg1Id,
                 body: "Hi test, this is Bob.",
-                sent_at: expect.any(Date),
+                sent_at: expect.any(String),
                 read_at: null,
                 to_user: {
                     username: "test",

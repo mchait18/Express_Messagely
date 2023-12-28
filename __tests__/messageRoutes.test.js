@@ -60,26 +60,26 @@ describe("GET /messages/:id", function () {
         let response = await request(app).get(`/messages/${msg1Id}`)
             .send({ _token: testUserToken })
         expect(response.statusCode).toBe(200)
-        // expect(response.body).toEqual({
-        //     message: {
-        //         id: msg1Id,
-        //         body: "Hi test, this is Bob.",
-        //         sent_at: expect.any(Date),
-        //         read_at: null,
-        //         from_user: {
-        //             username: "bob",
-        //             first_name: "Bob",
-        //             last_name: "Smith",
-        //             phone: "+14150000000"
-        //         },
-        //         to_user: {
-        //             username: "test",
-        //             first_name: "Test1",
-        //             last_name: "Testy",
-        //             phone: "+14150000000"
-        //         }
-        //     }
-        // })
+        expect(response.body).toEqual({
+            message: {
+                id: msg1Id,
+                body: "Hi test, this is Bob.",
+                sent_at: expect.any(String),
+                read_at: null,
+                from_user: {
+                    username: "bob",
+                    first_name: "Bob",
+                    last_name: "Smith",
+                    phone: "+14150000000"
+                },
+                to_user: {
+                    username: "test",
+                    first_name: "Test1",
+                    last_name: "Testy",
+                    phone: "+14150000000"
+                }
+            }
+        })
     })
 
     test("unauthorized get message", async function () {
@@ -89,24 +89,24 @@ describe("GET /messages/:id", function () {
 });
 
 describe("POST /messages", function () {
-    // test("Post message ", async function () {
-    //     let response = await request(app).post(`/messages/`)
-    //         .send({
-    //             to_username: "test",
-    //             body: "Hi Test",
-    //             _token: testUserToken
-    //         })
-    //     expect(response.statusCode).toBe(200)
-    //     expect(response.body).toEqual({
-    //         message: {
-    //             id: expect.any(Number),
-    //             from_username: "bob",
-    //             to_username: "test",
-    //             body: "Hi Test",
-    //             sent_at: expect.any(Date),
-    //         }
-    //     })
-    // })
+    test("Post message ", async function () {
+        let response = await request(app).post(`/messages/`)
+            .send({
+                to_username: "test",
+                body: "Hi Test",
+                _token: testUserToken
+            })
+        expect(response.statusCode).toBe(200)
+        expect(response.body).toEqual({
+            message: {
+                id: expect.any(Number),
+                from_username: "bob",
+                to_username: "test",
+                body: "Hi Test",
+                sent_at: expect.any(String),
+            }
+        })
+    })
 
     test("unauthorized post message", async function () {
         let response = await request(app).post(`/messages/`)
@@ -122,7 +122,7 @@ describe("POST /messages/:id/read", function () {
         expect(response.body).toEqual({
             message: {
                 id: msg2Id,
-                read_at: expect.any(Date)
+                read_at: expect.any(String)
             }
         })
     })
