@@ -20,6 +20,7 @@ let msg2Id;
 beforeEach(async function () {
     await db.query("DELETE FROM messages");
     await db.query("DELETE FROM users");
+    await db.query("ALTER SEQUENCE messages_id_seq RESTART WITH 1");
 
     let u1 = await User.register({
         username: "bob",
@@ -99,11 +100,11 @@ describe("POST /messages", function () {
         expect(response.statusCode).toBe(200)
         expect(response.body).toEqual({
             message: {
-                id: expect.any(Number),
+                id: 3,
                 from_username: "bob",
                 to_username: "test",
                 body: "Hi Test",
-                sent_at: expect.any(String),
+                sent_at: expect.any(String)
             }
         })
     })

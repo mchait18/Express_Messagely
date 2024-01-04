@@ -15,10 +15,10 @@ const { ensureLoggedIn } = require("../middleware/auth");
  * Make sure that the currently-logged-in users is either the to or from user.
  *
  **/
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", ensureLoggedIn, async (req, res, next) => {
     let message = await Message.get(req.params.id);
-    if (req.user && (req.user.username === message.from_user.username
-        || req.user.username === message.to_user.username))
+    if (req.user.username === message.from_user.username
+        || req.user.username === message.to_user.username)
         return res.json({ message });
 
     return next({ status: 401, message: "Unauthorized" });
@@ -49,10 +49,10 @@ router.post("/",
  *
  **/
 
-router.post("/:id/read", async (req, res, next) => {
+router.post("/:id/read", ensureLoggedIn, async (req, res, next) => {
     const { id } = req.params
     const message = await Message.get(id);
-    if (!req.user || req.user.username !== message.to_user.username) {
+    if (req.user.username !== message.to_user.username) {
         return next({ status: 401, message: "Unauthorized" });
     } else {
         const readMessage = await Message.markRead(id)

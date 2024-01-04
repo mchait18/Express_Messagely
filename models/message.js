@@ -13,6 +13,13 @@ class Message {
    */
 
   static async create({ from_username, to_username, body }) {
+    const to_user = await db.query(
+      `SELECT username FROM users WHERE username=$1`,
+      [to_username])
+    if (!to_user) {
+      console.log("!to_user ")
+      throw new ExpressError(`No such user: ${to_username}`, 500);
+    }
     const result = await db.query(
       `INSERT INTO messages (
               from_username,
@@ -72,7 +79,7 @@ class Message {
       [id]);
 
     let m = result.rows[0];
-
+    // console.log("in get, m is ", m)
     if (!m) {
       throw new ExpressError(`No such message: ${id}`, 404);
     }
